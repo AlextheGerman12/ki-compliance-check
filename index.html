@@ -708,7 +708,7 @@
   <!-- ==================== START SCREEN ==================== -->
   <div class="check-start" id="startScreen">
     <div class="check-start__badge">Schnellcheck</div>
-    <h1 class="check-start__title">Wie steht Ihre Kanzlei bei der KI-Compliance?</h1>
+    <h1 class="check-start__title">Wo steht Ihre Kanzlei bei der KI-Compliance?</h1>
     <p class="check-start__subtitle">10 Fragen. Klare Einordnung. Wissen, wo Sie stehen.</p>
     <p class="check-start__meta">Basierend auf dem BStBK FAQ-Katalog, EU AI Act und geltender Rechtslage (Stand: März 2026)</p>
     <div class="check-start__features">
@@ -779,12 +779,14 @@
         <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
-      <div class="g-recaptcha" data-sitekey="6Lc_xoQsAAAAALaKHxlarbM8JP8JoYZG4azp3cLn" data-size="invisible" data-callback="onCaptchaSuccess"></div>
+      <!-- Honeypot: invisible to humans, bots fill it out -->
+      <div style="position:absolute; left:-9999px;" aria-hidden="true">
+        <input type="text" id="honeypotField" name="website_url" tabindex="-1" autocomplete="off">
+      </div>
       <label style="display:flex; align-items:flex-start; gap:8px; margin-top:12px; cursor:pointer; max-width:460px; margin-left:auto; margin-right:auto;">
         <input type="checkbox" id="consentCheckbox" style="margin-top:3px; flex-shrink:0;">
         <span style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">Ich stimme der Verarbeitung meiner Daten gemäß der <a href="https://visionarydata.de/datenschutz" target="_blank" style="color:rgba(255,255,255,0.85); text-decoration:underline;">Datenschutzerklärung</a> zu. Meine E-Mail wird zur Zusendung des Reports und gelegentlicher Updates zur KI-Compliance verwendet. Jederzeit widerrufbar.</span>
       </label>
-      <p style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px; text-align:center;">Diese Seite nutzt Google reCAPTCHA. Es gelten die <a href="https://policies.google.com/privacy" target="_blank" style="color:rgba(255,255,255,0.5);">Datenschutzbestimmungen</a> und <a href="https://policies.google.com/terms" target="_blank" style="color:rgba(255,255,255,0.5);">Nutzungsbedingungen</a> von Google.</p>
       <div class="check-email-gate__success" id="emailSuccess"></div>
     </div>
 
@@ -803,7 +805,6 @@
   </div>
 </div>
 
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ==================== QUESTION DATA ====================
@@ -1995,13 +1996,16 @@ function submitEmail() {
   // Clear previous errors
   errEl.style.display = 'none';
 
-  // Trigger invisible reCAPTCHA — onCaptchaSuccess() will continue the flow
-  grecaptcha.execute();
-  return;
-}
-
-function onCaptchaSuccess(token) {
-  const email = document.getElementById('emailInput').value.trim();
+  // Honeypot check — bots fill this hidden field, humans don't see it
+  if (document.getElementById('honeypotField').value) {
+    // Silently pretend success so bots think it worked
+    document.getElementById('emailForm').style.display = 'none';
+    const successEl = document.getElementById('emailSuccess');
+    successEl.innerHTML = '&#10003; Ihr PDF wird heruntergeladen.';
+    successEl.style.display = 'block';
+    successEl.style.color = 'var(--green)';
+    return;
+  }
 
   // Generate and download PDF
   const doc = generatePDF(

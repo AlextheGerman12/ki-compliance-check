@@ -768,7 +768,14 @@
         <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
-      <p class="check-email-gate__hint">Wir senden Ihnen den Report und gelegentlich relevante Updates zur KI-Compliance. Jederzeit abbestellbar.</p>
+      <div style="margin-top:12px; display:flex; justify-content:center;">
+        <div class="g-recaptcha" data-sitekey="6Lc_xoQsAAAAALaKHxlarbM8JP8JoYZG4azp3cLn"></div>
+      </div>
+      <label style="display:flex; align-items:flex-start; gap:8px; margin-top:12px; cursor:pointer; max-width:460px; margin-left:auto; margin-right:auto;">
+        <input type="checkbox" id="consentCheckbox" style="margin-top:3px; flex-shrink:0;">
+        <span style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">Ich stimme der Verarbeitung meiner Daten gemäß der <a href="https://visionarydata.de/datenschutz" target="_blank" style="color:rgba(255,255,255,0.85); text-decoration:underline;">Datenschutzerklärung</a> zu. Meine E-Mail wird zur Zusendung des Reports und gelegentlicher Updates zur KI-Compliance verwendet. Jederzeit widerrufbar.</span>
+      </label>
+      <p style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:8px; text-align:center;">Diese Seite nutzt Google reCAPTCHA. Es gelten die <a href="https://policies.google.com/privacy" target="_blank" style="color:rgba(255,255,255,0.5);">Datenschutzbestimmungen</a> und <a href="https://policies.google.com/terms" target="_blank" style="color:rgba(255,255,255,0.5);">Nutzungsbedingungen</a> von Google.</p>
       <div class="check-email-gate__success" id="emailSuccess"></div>
     </div>
 
@@ -778,10 +785,16 @@
         <a href="https://visionarydata.de" class="check-footer__link" target="_blank">KI-Compliance-Checkliste</a>
         der Visionary Data GmbH.
       </p>
+      <p class="check-footer__text" style="margin-top:8px;">
+        <a href="https://visionarydata.de/impressum" target="_blank" class="check-footer__link">Impressum</a>
+        &nbsp;|&nbsp;
+        <a href="https://visionarydata.de/datenschutz" target="_blank" class="check-footer__link">Datenschutz</a>
+      </p>
     </div>
   </div>
 </div>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ==================== QUESTION DATA ====================
@@ -1949,6 +1962,19 @@ function submitEmail() {
   if (!email || !email.includes('@') || !email.includes('.')) {
     input.style.borderColor = 'var(--red)';
     input.focus();
+    return;
+  }
+
+  // Consent check
+  if (!document.getElementById('consentCheckbox').checked) {
+    alert('Bitte stimmen Sie der Datenschutzerklärung zu.');
+    return;
+  }
+
+  // reCAPTCHA check
+  const captchaResponse = grecaptcha.getResponse();
+  if (!captchaResponse) {
+    alert('Bitte bestätigen Sie, dass Sie kein Roboter sind.');
     return;
   }
 

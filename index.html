@@ -54,6 +54,8 @@
     max-width: 960px;
     margin: 0 auto;
     padding: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .check-container--narrow {
@@ -438,7 +440,7 @@
   /* ==================== RESULT ITEMS ==================== */
   .check-results__columns {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 24px;
     margin-bottom: 40px;
   }
@@ -521,6 +523,7 @@
 
   .result-item__content {
     flex: 1;
+    min-width: 0;
   }
 
   .result-item__title {
@@ -678,26 +681,30 @@
   }
 
   /* ==================== RESPONSIVE ==================== */
-  @media (max-width: 768px) {
-    .check-results__columns {
-      grid-template-columns: 1fr;
-      gap: 28px;
-    }
-  }
-
-  @media (max-width: 568px) {
-    .check-container { padding: 12px; }
-    .check-start { padding: 30px 8px; }
-    .check-start__title { font-size: 24px; }
-    .check-start__subtitle { font-size: 15px; }
+  @media (max-width: 420px) {
+    .check-container { padding: 10px; }
+    .check-start { padding: 24px 6px; }
+    .check-start__title { font-size: 22px; }
+    .check-start__subtitle { font-size: 14px; }
     .check-start__meta { font-size: 12px; }
-    .check-start__features { gap: 16px; flex-direction: column; align-items: center; }
-    .check-email-gate { padding: 24px 16px; }
+    .check-start__features { gap: 12px; flex-direction: column; align-items: center; }
+    .check-email-gate { padding: 20px 12px; }
     .check-email-gate__form { flex-direction: column; }
-    .check-email-gate__title { font-size: 20px; }
+    .check-email-gate__title { font-size: 18px; }
+    .check-email-gate__text { font-size: 13px; }
     .check-nav { flex-direction: column-reverse; gap: 8px; }
     .check-nav .btn { width: 100%; }
     .check-question__title { font-size: 18px; }
+    .check-answer { padding: 12px 14px; font-size: 14px; gap: 10px; }
+    .btn { padding: 14px 24px; font-size: 15px; }
+    .check-results__header { padding: 24px 0 20px; }
+    .check-results__verdict { font-size: 20px; }
+    .check-results__verdict-sub { font-size: 14px; }
+    .summary-badge { padding: 8px 12px; font-size: 12px; }
+    .result-item { padding: 14px; }
+    .result-item__title { font-size: 14px; }
+    .result-item__desc { font-size: 12px; }
+    .check-footer__text { font-size: 12px; }
   }
 </style>
 </head>

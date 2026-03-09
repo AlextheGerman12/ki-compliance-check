@@ -768,9 +768,7 @@
         <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
-      <div style="margin-top:12px; display:flex; justify-content:center;">
-        <div class="g-recaptcha" data-sitekey="6Lc_xoQsAAAAALaKHxlarbM8JP8JoYZG4azp3cLn"></div>
-      </div>
+      <div class="g-recaptcha" data-sitekey="6Lc_xoQsAAAAALaKHxlarbM8JP8JoYZG4azp3cLn" data-size="invisible" data-callback="onCaptchaSuccess"></div>
       <label style="display:flex; align-items:flex-start; gap:8px; margin-top:12px; cursor:pointer; max-width:460px; margin-left:auto; margin-right:auto;">
         <input type="checkbox" id="consentCheckbox" style="margin-top:3px; flex-shrink:0;">
         <span style="font-size:12px; color:rgba(255,255,255,0.65); line-height:1.5;">Ich stimme der Verarbeitung meiner Daten gemäß der <a href="https://visionarydata.de/datenschutz" target="_blank" style="color:rgba(255,255,255,0.85); text-decoration:underline;">Datenschutzerklärung</a> zu. Meine E-Mail wird zur Zusendung des Reports und gelegentlicher Updates zur KI-Compliance verwendet. Jederzeit widerrufbar.</span>
@@ -1959,24 +1957,40 @@ function submitEmail() {
   const input = document.getElementById('emailInput');
   const email = input.value.trim();
 
+  // Inline error helper
+  const errEl = document.getElementById('emailSuccess');
+  function showError(msg) {
+    errEl.innerHTML = msg;
+    errEl.style.display = 'block';
+    errEl.style.color = '#e53e3e';
+    errEl.style.fontSize = '14px';
+    errEl.style.fontWeight = '600';
+    errEl.style.padding = '10px';
+  }
+
   if (!email || !email.includes('@') || !email.includes('.')) {
     input.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
     input.focus();
     return;
   }
 
   // Consent check
   if (!document.getElementById('consentCheckbox').checked) {
-    alert('Bitte stimmen Sie der Datenschutzerklärung zu.');
+    showError('Bitte stimmen Sie der Datenschutzerklärung zu.');
     return;
   }
 
-  // reCAPTCHA check
-  const captchaResponse = grecaptcha.getResponse();
-  if (!captchaResponse) {
-    alert('Bitte bestätigen Sie, dass Sie kein Roboter sind.');
-    return;
-  }
+  // Clear previous errors
+  errEl.style.display = 'none';
+
+  // Trigger invisible reCAPTCHA — onCaptchaSuccess() will continue the flow
+  grecaptcha.execute();
+  return;
+}
+
+function onCaptchaSuccess(token) {
+  const email = document.getElementById('emailInput').value.trim();
 
   // Generate and download PDF
   const doc = generatePDF(

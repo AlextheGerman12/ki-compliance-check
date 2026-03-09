@@ -35,12 +35,18 @@
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     color: var(--text-primary);
     background: var(--white);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 0;
   }
 
   /* ==================== CONTAINER ==================== */
@@ -680,13 +686,18 @@
   }
 
   @media (max-width: 568px) {
-    .check-container { padding: 16px; }
-    .check-start { padding: 40px 12px; }
+    .check-container { padding: 12px; }
+    .check-start { padding: 30px 8px; }
+    .check-start__title { font-size: 24px; }
+    .check-start__subtitle { font-size: 15px; }
+    .check-start__meta { font-size: 12px; }
     .check-start__features { gap: 16px; flex-direction: column; align-items: center; }
-    .check-email-gate { padding: 28px 20px; }
+    .check-email-gate { padding: 24px 16px; }
     .check-email-gate__form { flex-direction: column; }
+    .check-email-gate__title { font-size: 20px; }
     .check-nav { flex-direction: column-reverse; gap: 8px; }
     .check-nav .btn { width: 100%; }
+    .check-question__title { font-size: 18px; }
   }
 </style>
 </head>
@@ -699,7 +710,7 @@
     <div class="check-start__badge">Schnellcheck</div>
     <h1 class="check-start__title">Wie steht Ihre Kanzlei bei der KI-Compliance?</h1>
     <p class="check-start__subtitle">10 Fragen. Klare Einordnung. Wissen, wo Sie stehen.</p>
-    <p class="check-start__meta">Basierend auf dem BStBK FAQ-Katalog, EU AI Act und geltender Rechtslage (Stand: Marz 2026)</p>
+    <p class="check-start__meta">Basierend auf dem BStBK FAQ-Katalog, EU AI Act und geltender Rechtslage (Stand: März 2026)</p>
     <div class="check-start__features">
       <div class="check-start__feature">
         <div class="check-start__feature-icon">&#10003;</div>

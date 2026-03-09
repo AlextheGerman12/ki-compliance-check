@@ -440,7 +440,7 @@
   /* ==================== RESULT ITEMS ==================== */
   .check-results__columns {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
     margin-bottom: 40px;
   }
@@ -680,32 +680,30 @@
     color: var(--accent);
   }
 
-  /* ==================== RESPONSIVE ==================== */
-  @media (max-width: 420px) {
-    .check-container { padding: 10px; }
-    .check-start { padding: 24px 6px; }
-    .check-start__title { font-size: 22px; }
-    .check-start__subtitle { font-size: 14px; }
-    .check-start__meta { font-size: 12px; }
-    .check-start__features { gap: 12px; flex-direction: column; align-items: center; }
-    .check-email-gate { padding: 20px 12px; }
-    .check-email-gate__form { flex-direction: column; }
-    .check-email-gate__title { font-size: 18px; }
-    .check-email-gate__text { font-size: 13px; }
-    .check-nav { flex-direction: column-reverse; gap: 8px; }
-    .check-nav .btn { width: 100%; }
-    .check-question__title { font-size: 18px; }
-    .check-answer { padding: 12px 14px; font-size: 14px; gap: 10px; }
-    .btn { padding: 14px 24px; font-size: 15px; }
-    .check-results__header { padding: 24px 0 20px; }
-    .check-results__verdict { font-size: 20px; }
-    .check-results__verdict-sub { font-size: 14px; }
-    .summary-badge { padding: 8px 12px; font-size: 12px; }
-    .result-item { padding: 14px; }
-    .result-item__title { font-size: 14px; }
-    .result-item__desc { font-size: 12px; }
-    .check-footer__text { font-size: 12px; }
-  }
+  /* ==================== MOBILE (detected via JS screen.width) ==================== */
+  .is-mobile .check-container { padding: 12px; }
+  .is-mobile .check-start { padding: 28px 8px; }
+  .is-mobile .check-start__title { font-size: 22px; }
+  .is-mobile .check-start__subtitle { font-size: 15px; }
+  .is-mobile .check-start__meta { font-size: 12px; margin-bottom: 28px; }
+  .is-mobile .check-start__features { gap: 12px; flex-direction: column; align-items: center; }
+  .is-mobile .check-results__columns { grid-template-columns: 1fr; gap: 28px; }
+  .is-mobile .check-results__header { padding: 28px 0 20px; }
+  .is-mobile .check-results__verdict-sub { font-size: 14px; }
+  .is-mobile .summary-badge { padding: 8px 14px; font-size: 13px; }
+  .is-mobile .check-email-gate { padding: 24px 16px; }
+  .is-mobile .check-email-gate__form { flex-direction: column; }
+  .is-mobile .check-email-gate__title { font-size: 19px; }
+  .is-mobile .check-email-gate__text { font-size: 13px; }
+  .is-mobile .check-nav { flex-direction: column-reverse; gap: 8px; }
+  .is-mobile .check-nav .btn { width: 100%; }
+  .is-mobile .check-question__title { font-size: 18px; }
+  .is-mobile .check-answer { padding: 12px 14px; font-size: 14px; gap: 10px; }
+  .is-mobile .btn { padding: 14px 28px; font-size: 15px; }
+  .is-mobile .result-item { padding: 12px; }
+  .is-mobile .result-item__title { font-size: 13px; }
+  .is-mobile .result-item__desc { font-size: 12px; }
+  .is-mobile .check-footer__text { font-size: 12px; }
 </style>
 </head>
 <body>
@@ -814,6 +812,12 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+// ==================== DEVICE DETECTION ====================
+(function() {
+  var isMobile = screen.width <= 768;
+  document.body.classList.add(isMobile ? 'is-mobile' : 'is-desktop');
+})();
+
 // ==================== QUESTION DATA ====================
 const questions = [
   {

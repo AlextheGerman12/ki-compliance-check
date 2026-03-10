@@ -2062,6 +2062,18 @@ function submitEmail() {
   }).catch((err) => console.warn('HubSpot submission failed:', err));
 }
 
+// ==================== AUTO-RESIZE IFRAME ====================
+(function() {
+  function sendHeight() {
+    var height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'ki-check-resize', height: height }, '*');
+  }
+  // Send height on load, resize, and periodically (for dynamic content changes)
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  new MutationObserver(sendHeight).observe(document.body, { childList: true, subtree: true, attributes: true });
+})();
+
 </script>
 
 </body>

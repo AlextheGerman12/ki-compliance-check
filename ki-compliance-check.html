@@ -1860,6 +1860,23 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   newPage();
   y = 30;
 
+  // Checklist bridge text
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...c.text);
+  doc.text('Noch tiefer einsteigen?', margin, y);
+  y += 6;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...c.secondary);
+  const bridgeLines = doc.splitTextToSize(
+    'Sie möchten die vollständige Checkliste mit allen 16 Prüfpunkten? Laden Sie unsere kostenlose KI-Compliance-Checkliste herunter \u2014 mit konkreten Handlungsempfehlungen für jeden einzelnen Punkt.',
+    contentW
+  );
+  doc.text(bridgeLines, margin, y);
+  y += bridgeLines.length * 4 + 12;
+
   // CTA block with smooth gradient via direct RGB (no opacity = no banding)
   const ctaH = 72;
   // Base rounded rect for corners

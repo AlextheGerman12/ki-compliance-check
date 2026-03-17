@@ -1866,40 +1866,11 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   const ctaBoxH = 72;
   const boxPad = 10;
 
-  // --- Box 1: Checkliste (links, heller Hintergrund) ---
+  // --- Box 1: Checkliste (links, dunkler Gradient) ---
   const box1X = margin;
-  doc.setFillColor(...c.lightGray);
-  doc.roundedRect(box1X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
-
-  // Subtle accent line
-  doc.setFillColor(...c.accent);
-  doc.rect(box1X + boxPad, y + 12, 25, 0.8, 'F');
-
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...c.secondary);
-  doc.text('VERTIEFUNG', box1X + boxPad, y + 10);
-
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...c.text);
-  doc.text('Noch tiefer einsteigen?', box1X + boxPad, y + 26);
-
-  doc.setFontSize(9);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(...c.secondary);
-  const box1Lines = doc.splitTextToSize(
-    'Unsere vollständige KI-Compliance-Checkliste mit allen 16 Prüfpunkten — inklusive konkreter Handlungsempfehlungen für jeden einzelnen Punkt.',
-    ctaBoxW - boxPad * 2
-  );
-  doc.text(box1Lines, box1X + boxPad, y + 36);
-
-  // --- Box 2: Beratung (rechts, dunkler Gradient) ---
-  const box2X = margin + ctaBoxW + ctaBoxGap;
-
   // Base rounded rect
   doc.setFillColor(55, 18, 52);
-  doc.roundedRect(box2X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
+  doc.roundedRect(box1X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
   // Gradient strips
   const ctaGradSteps = 60;
   const ctaStepW = ctaBoxW / ctaGradSteps;
@@ -1909,12 +1880,41 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
     const g = Math.round(23 + (18 - 23) * frac);
     const b = Math.round(42 + (52 - 42) * frac);
     doc.setFillColor(r, g, b);
-    doc.rect(box2X + gs * ctaStepW, y, ctaStepW + 0.3, ctaBoxH, 'F');
+    doc.rect(box1X + gs * ctaStepW, y, ctaStepW + 0.3, ctaBoxH, 'F');
   }
   // Clean left edge with rounded corner
   doc.setFillColor(15, 23, 42);
-  doc.roundedRect(box2X, y, 5, ctaBoxH, 4, 4, 'F');
-  doc.rect(box2X + 3, y, ctaStepW * 2, ctaBoxH, 'F');
+  doc.roundedRect(box1X, y, 5, ctaBoxH, 4, 4, 'F');
+  doc.rect(box1X + 3, y, ctaStepW * 2, ctaBoxH, 'F');
+
+  // Subtle accent line
+  doc.setFillColor(...c.accent);
+  doc.rect(box1X + boxPad, y + 12, 25, 0.8, 'F');
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(180, 195, 215);
+  doc.text('VERTIEFUNG', box1X + boxPad, y + 10);
+
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...c.white);
+  doc.text('Noch tiefer einsteigen?', box1X + boxPad, y + 26);
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(180, 195, 215);
+  const box1Lines = doc.splitTextToSize(
+    'Unsere vollständige KI-Compliance-Checkliste mit allen 16 Prüfpunkten — inklusive konkreter Handlungsempfehlungen für jeden einzelnen Punkt.',
+    ctaBoxW - boxPad * 2
+  );
+  doc.text(box1Lines, box1X + boxPad, y + 36);
+
+  // --- Box 2: Beratung (rechts, Akzent-Farbton) ---
+  const box2X = margin + ctaBoxW + ctaBoxGap;
+  // Soft accent background (light warm rose)
+  doc.setFillColor(253, 232, 243);
+  doc.roundedRect(box2X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
 
   // Subtle accent line
   doc.setFillColor(...c.accent);
@@ -1922,18 +1922,18 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(180, 195, 215);
+  doc.setTextColor(...c.accent);
   doc.text('NÄCHSTER SCHRITT', box2X + boxPad, y + 10);
 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...c.white);
+  doc.setTextColor(...c.text);
   doc.text('Compliance sauber', box2X + boxPad, y + 26);
   doc.text('aufsetzen', box2X + boxPad, y + 35);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(180, 195, 215);
+  doc.setTextColor(...c.secondary);
   const box2Lines = doc.splitTextToSize(
     'In einem kostenlosen 30-Minuten-Gespräch zeigen wir Ihnen, wie Sie Ihre Compliance-Lücken systematisch schließen.',
     ctaBoxW - boxPad * 2
@@ -1970,10 +1970,20 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   ];
 
   offerings.forEach((o, i) => {
-    doc.setFillColor(...c.lightGray);
-    doc.roundedRect(margin, y, contentW, 16, 2, 2, 'F');
+    // Wrap description text
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    const descMaxW = contentW - 16;
+    const descLines = doc.splitTextToSize(o.desc, descMaxW);
+    const descH = descLines.length * 3.5;
+    const rowH = Math.max(16, 12 + descH);
 
-    doc.setFillColor(...c.dark);
+    // Light rose background (matching Box 2 accent tone)
+    doc.setFillColor(253, 232, 243);
+    doc.roundedRect(margin, y, contentW, rowH, 2, 2, 'F');
+
+    // Accent-colored circle
+    doc.setFillColor(...c.accent);
     doc.circle(margin + 7, y + 8, 3.5, 'F');
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
@@ -1988,9 +1998,9 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
     doc.setFontSize(7.5);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(...c.secondary);
-    doc.text(o.desc, margin + 14, y + 11.5);
+    doc.text(descLines, margin + 14, y + 11.5);
 
-    y += 19;
+    y += rowH + 3;
   });
 
   // Footer with contact info bottom-right

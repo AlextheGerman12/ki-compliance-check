@@ -1860,70 +1860,88 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   newPage();
   y = 30;
 
-  // Checklist bridge text
-  doc.setFontSize(10);
+  // ===== TWO EQUAL CTA BOXES =====
+  const ctaBoxGap = 4;
+  const ctaBoxW = (contentW - ctaBoxGap) / 2;
+  const ctaBoxH = 72;
+  const boxPad = 10;
+
+  // --- Box 1: Checkliste (links, heller Hintergrund) ---
+  const box1X = margin;
+  doc.setFillColor(...c.lightGray);
+  doc.roundedRect(box1X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
+
+  // Subtle accent line
+  doc.setFillColor(...c.accent);
+  doc.rect(box1X + boxPad, y + 12, 25, 0.8, 'F');
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...c.secondary);
+  doc.text('VERTIEFUNG', box1X + boxPad, y + 10);
+
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...c.text);
-  doc.text('Noch tiefer einsteigen?', margin, y);
-  y += 6;
+  doc.text('Noch tiefer einsteigen?', box1X + boxPad, y + 26);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...c.secondary);
-  const bridgeLines = doc.splitTextToSize(
-    'Sie möchten die vollständige Checkliste mit allen 16 Prüfpunkten? Laden Sie unsere kostenlose KI-Compliance-Checkliste herunter \u2014 mit konkreten Handlungsempfehlungen für jeden einzelnen Punkt.',
-    contentW
+  const box1Lines = doc.splitTextToSize(
+    'Unsere vollständige KI-Compliance-Checkliste mit allen 16 Prüfpunkten — inklusive konkreter Handlungsempfehlungen für jeden einzelnen Punkt.',
+    ctaBoxW - boxPad * 2
   );
-  doc.text(bridgeLines, margin, y);
-  y += bridgeLines.length * 4 + 12;
+  doc.text(box1Lines, box1X + boxPad, y + 36);
 
-  // CTA block with smooth gradient via direct RGB (no opacity = no banding)
-  const ctaH = 72;
-  // Base rounded rect for corners
+  // --- Box 2: Beratung (rechts, dunkler Gradient) ---
+  const box2X = margin + ctaBoxW + ctaBoxGap;
+
+  // Base rounded rect
   doc.setFillColor(55, 18, 52);
-  doc.roundedRect(margin, y, contentW, ctaH, 4, 4, 'F');
-  // Direct RGB gradient strips: dark navy [15,23,42] → accent-dark [55,18,52]
-  const ctaGradSteps = 80;
-  const ctaStepW = contentW / ctaGradSteps;
+  doc.roundedRect(box2X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
+  // Gradient strips
+  const ctaGradSteps = 60;
+  const ctaStepW = ctaBoxW / ctaGradSteps;
   for (let gs = 2; gs < ctaGradSteps - 2; gs++) {
     const frac = gs / (ctaGradSteps - 1);
     const r = Math.round(15 + (55 - 15) * frac);
     const g = Math.round(23 + (18 - 23) * frac);
     const b = Math.round(42 + (52 - 42) * frac);
     doc.setFillColor(r, g, b);
-    doc.rect(margin + gs * ctaStepW, y, ctaStepW + 0.3, ctaH, 'F');
+    doc.rect(box2X + gs * ctaStepW, y, ctaStepW + 0.3, ctaBoxH, 'F');
   }
   // Clean left edge with rounded corner
   doc.setFillColor(15, 23, 42);
-  doc.roundedRect(margin, y, 5, ctaH, 4, 4, 'F');
-  doc.rect(margin + 3, y, ctaStepW * 2, ctaH, 'F');
+  doc.roundedRect(box2X, y, 5, ctaBoxH, 4, 4, 'F');
+  doc.rect(box2X + 3, y, ctaStepW * 2, ctaBoxH, 'F');
 
   // Subtle accent line
   doc.setFillColor(...c.accent);
-  doc.rect(margin + 12, y + 12, 25, 0.8, 'F');
+  doc.rect(box2X + boxPad, y + 12, 25, 0.8, 'F');
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(180, 195, 215);
-  doc.text('NÄCHSTER SCHRITT', margin + 12, y + 10);
+  doc.text('NÄCHSTER SCHRITT', box2X + boxPad, y + 10);
 
-  doc.setFontSize(17);
+  doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...c.white);
-  doc.text('Compliance sauber aufsetzen —', margin + 12, y + 26);
-  doc.text('wir helfen Ihnen dabei.', margin + 12, y + 35);
+  doc.text('Compliance sauber', box2X + boxPad, y + 26);
+  doc.text('aufsetzen', box2X + boxPad, y + 35);
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(180, 195, 215);
-  const ctaLines = doc.splitTextToSize(
-    'In einem kostenlosen 30-Minuten-Gespräch zeigen wir Ihnen, wie Sie Ihre Compliance-Lücken systematisch schließen — priorisiert und mit realistischem Aufwand.',
-    contentW - 24
+  const box2Lines = doc.splitTextToSize(
+    'In einem kostenlosen 30-Minuten-Gespräch zeigen wir Ihnen, wie Sie Ihre Compliance-Lücken systematisch schließen.',
+    ctaBoxW - boxPad * 2
   );
-  doc.text(ctaLines, margin + 12, y + 44);
+  doc.text(box2Lines, box2X + boxPad, y + 44);
 
-  // CTA Button with clickable link
-  const btnX = margin + 12;
+  // CTA Button
+  const btnX = box2X + boxPad;
   const btnY = y + 58;
   const btnW = 55;
   const btnH = 9;
@@ -1945,9 +1963,9 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   y += 8;
 
   const offerings = [
-    { title: 'KI-Compliance Audit', desc: 'Systematische Prüfung Ihrer KI-Nutzung gegen alle 16 Checkpunkte — mit konkretem Maßnahmenplan.' },
-    { title: 'Vertragscheck', desc: 'Prüfung Ihrer Verträge: Verschwiegenheitsvereinbarung, AVV, Subunternehmer-Kette, Training-Opt-out.' },
-    { title: 'KI-Richtlinie', desc: 'Maßgeschneiderte KI-Richtlinie für Ihre Kanzlei — inklusive Datenklassifikation und Freigabeprozesse.' },
+    { title: 'KI-Compliance Check', desc: 'Systematische Bestandsaufnahme Ihrer KI-Nutzung gegen alle Checkpunkte, mit konkretem Maßnahmenplan.' },
+    { title: 'Vertrags-Bestandsaufnahme', desc: 'Strukturierte Prüfung Ihrer Vertragsunterlagen (AVV, Verschwiegenheit, Subunternehmer) anhand unserer Compliance-Checkliste.' },
+    { title: 'KI-Richtlinie', desc: 'Maßgeschneiderte KI-Richtlinie für Ihre Kanzlei — inklusive Datenklassifikation und Freigabeprozesse, in Abstimmung mit Ihrem Datenschutzbeauftragten oder Rechtsberater.' },
     { title: 'Mitarbeiterschulung', desc: 'Dokumentierte KI-Schulung nach Art. 4 EU AI Act — praxisnah, mit echten Kanzlei-Anwendungsfällen.' }
   ];
 

@@ -823,7 +823,7 @@
     <div class="check-footer">
       <p class="check-footer__text">
         Dieser Schnellcheck ersetzt keine Rechtsberatung. Basierend auf der
-        <a href="https://visionarydata.de" class="check-footer__link" target="_blank">KI-Compliance-Checkliste</a>
+        <a href="https://visionarydata.de/checkliste-ki-compliance" class="check-footer__link" target="_blank">KI-Compliance-Checkliste</a>
         der Visionary Data GmbH.
       </p>
       <p class="check-footer__text" style="margin-top:8px;">
@@ -1936,7 +1936,7 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...c.white);
   doc.text('Checkliste herunterladen', btn1X + btn1W / 2, btn1Y + 6, { align: 'center' });
-  doc.link(btn1X, btn1Y, btn1W, btn1H, { url: '#' });
+  doc.link(btn1X, btn1Y, btn1W, btn1H, { url: 'https://visionarydata.de/checkliste-ki-compliance' });
 
   // --- Box 2: Beratung (rechts, Akzent-Farbton) ---
   const box2X = margin + ctaBoxW + ctaBoxGap;

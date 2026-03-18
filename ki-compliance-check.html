@@ -1940,8 +1940,8 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
 
   // --- Box 2: Beratung (rechts, Akzent-Farbton) ---
   const box2X = margin + ctaBoxW + ctaBoxGap;
-  // Soft accent background (light warm rose)
-  doc.setFillColor(253, 232, 243);
+  // Soft blue-purple background
+  doc.setFillColor(232, 234, 252);
   doc.roundedRect(box2X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
 
   // Subtle accent line
@@ -2006,12 +2006,12 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
     const descH = descLines.length * 3.5;
     const rowH = Math.max(16, 12 + descH);
 
-    // Light rose background (matching Box 2 accent tone)
-    doc.setFillColor(253, 232, 243);
+    // Light blue-purple background (matching Box 2)
+    doc.setFillColor(232, 234, 252);
     doc.roundedRect(margin, y, contentW, rowH, 2, 2, 'F');
 
-    // Accent-colored circle
-    doc.setFillColor(...c.accent);
+    // Blue-purple circle
+    doc.setFillColor(80, 70, 160);
     doc.circle(margin + 7, y + 8, 3.5, 'F');
     doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');

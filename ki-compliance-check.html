@@ -791,6 +791,7 @@
         Erhalten Sie Ihre Ergebnisse als PDF-Report — mit konkreten Handlungsschritten, Aufwandsschätzungen und Priorisierung für Ihre Kanzlei. Inklusive der vollständigen 16-Punkte-Checkliste.
       </p>
       <div class="check-email-gate__form" id="emailForm">
+        <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
         <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
@@ -1910,6 +1911,19 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   );
   doc.text(box1Lines, box1X + boxPad, y + 36);
 
+  // Checkliste Button (Link wird später ergänzt)
+  const btn1X = box1X + boxPad;
+  const btn1Y = y + 58;
+  const btn1W = 58;
+  const btn1H = 9;
+  doc.setFillColor(...c.accent);
+  doc.roundedRect(btn1X, btn1Y, btn1W, btn1H, 2.5, 2.5, 'F');
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...c.white);
+  doc.text('Checkliste herunterladen', btn1X + btn1W / 2, btn1Y + 6, { align: 'center' });
+  doc.link(btn1X, btn1Y, btn1W, btn1H, { url: '#' });
+
   // --- Box 2: Beratung (rechts, Akzent-Farbton) ---
   const box2X = margin + ctaBoxW + ctaBoxGap;
   // Soft accent background (light warm rose)
@@ -2033,6 +2047,8 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
 
 // ==================== EMAIL + PDF ====================
 function submitEmail() {
+  const nameInput = document.getElementById('nameInput');
+  const userName = nameInput.value.trim();
   const input = document.getElementById('emailInput');
   const email = input.value.trim();
 
@@ -2098,6 +2114,7 @@ function submitEmail() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       fields: [
+        { name: 'firstname', value: userName },
         { name: 'email', value: email },
         { name: 'ki_check_score', value: String(KICheck.cachedScore) },
         { name: 'kicheck_persona', value: KICheck.cachedPersona },

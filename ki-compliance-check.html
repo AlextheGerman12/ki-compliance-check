@@ -617,9 +617,20 @@
 
   .check-email-gate__form {
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
-    max-width: 460px;
+    max-width: 520px;
     margin: 0 auto 12px;
+  }
+
+  .check-email-gate__input-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .check-email-gate__form .btn {
+    width: 100%;
   }
 
   .check-email-gate__input {
@@ -700,6 +711,7 @@
     .summary-badge { padding: 8px 14px; font-size: 13px; }
     .check-email-gate { padding: 24px 16px; }
     .check-email-gate__form { flex-direction: column; max-width: 100%; }
+    .check-email-gate__input-row { flex-direction: column; }
     .check-email-gate__title { font-size: 19px; }
     .check-email-gate__text { font-size: 13px; max-width: 100%; }
     .check-nav { flex-direction: column-reverse; gap: 8px; }
@@ -791,8 +803,10 @@
         Erhalten Sie Ihre Ergebnisse als PDF-Report — mit konkreten Handlungsschritten, Aufwandsschätzungen und Priorisierung für Ihre Kanzlei. Inklusive der vollständigen 16-Punkte-Checkliste.
       </p>
       <div class="check-email-gate__form" id="emailForm">
-        <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
-        <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
+        <div class="check-email-gate__input-row">
+          <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
+          <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
+        </div>
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
       <!-- Honeypot: invisible to humans, bots fill it out -->

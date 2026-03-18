@@ -1944,13 +1944,13 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   doc.setFillColor(232, 234, 252);
   doc.roundedRect(box2X, y, ctaBoxW, ctaBoxH, 4, 4, 'F');
 
-  // Subtle accent line
-  doc.setFillColor(...c.accent);
+  // Subtle purple line
+  doc.setFillColor(80, 70, 160);
   doc.rect(box2X + boxPad, y + 12, 25, 0.8, 'F');
 
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
-  doc.setTextColor(...c.accent);
+  doc.setTextColor(80, 70, 160);
   doc.text('NÄCHSTER SCHRITT', box2X + boxPad, y + 10);
 
   doc.setFontSize(14);
@@ -1968,12 +1968,12 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
   );
   doc.text(box2Lines, box2X + boxPad, y + 44);
 
-  // CTA Button
+  // CTA Button (purple matching offering circles)
   const btnX = box2X + boxPad;
   const btnY = y + 58;
   const btnW = 55;
   const btnH = 9;
-  doc.setFillColor(...c.accent);
+  doc.setFillColor(80, 70, 160);
   doc.roundedRect(btnX, btnY, btnW, btnH, 2.5, 2.5, 'F');
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');

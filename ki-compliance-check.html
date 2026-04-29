@@ -633,8 +633,31 @@
     width: 100%;
   }
 
+  .check-email-gate__field {
+    flex: 1;
+    position: relative;
+    display: flex;
+  }
+
+  .check-email-gate__field--required::after {
+    content: '*';
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    color: #e53e3e;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .check-email-gate__field--required .check-email-gate__input {
+    padding-right: 28px;
+  }
+
   .check-email-gate__input {
     flex: 1;
+    width: 100%;
     padding: 14px 18px;
     border: 2px solid rgba(255,255,255,0.15);
     border-radius: var(--radius-sm);
@@ -800,16 +823,24 @@
     <div class="check-email-gate" id="emailGate">
       <h3 class="check-email-gate__title">Ihre persönliche Compliance-Zusammenfassung</h3>
       <p class="check-email-gate__text">
-        Erhalten Sie Ihre Ergebnisse als PDF-Report — mit konkreten Handlungsschritten, Aufwandsschätzungen und Priorisierung für Ihre Kanzlei. Inklusive der vollständigen 16-Punkte-Checkliste.
+        Erhalten Sie Ihre Ergebnisse als PDF-Report — mit konkreten Handlungsschritten, Aufwandsschätzungen und Priorisierung für Ihre Kanzlei. Inklusive der vollständigen 18-Punkte-Checkliste.
       </p>
       <div class="check-email-gate__form" id="emailForm">
         <div class="check-email-gate__input-row">
-          <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
-          <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
+          <div class="check-email-gate__field check-email-gate__field--required">
+            <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
+          </div>
+          <div class="check-email-gate__field check-email-gate__field--required">
+            <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
+          </div>
         </div>
         <div class="check-email-gate__input-row">
-          <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Firma">
-          <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer">
+          <div class="check-email-gate__field check-email-gate__field--required">
+            <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Kanzlei">
+          </div>
+          <div class="check-email-gate__field">
+            <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer">
+          </div>
         </div>
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
@@ -2083,10 +2114,28 @@ function submitEmail() {
     errEl.style.padding = '10px';
   }
 
+  // Reset previous error styles
+  const companyInput = document.getElementById('companyInput');
+  [nameInput, input, companyInput].forEach(el => el.style.borderColor = '');
+
+  if (!userName) {
+    nameInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie Ihren Namen ein.');
+    nameInput.focus();
+    return;
+  }
+
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     input.style.borderColor = 'var(--red)';
     showError('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
     input.focus();
+    return;
+  }
+
+  if (!company) {
+    companyInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie Ihre Kanzlei ein.');
+    companyInput.focus();
     return;
   }
 

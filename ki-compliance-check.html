@@ -807,6 +807,10 @@
           <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
           <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
         </div>
+        <div class="check-email-gate__input-row">
+          <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Firma">
+          <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer">
+        </div>
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
       </div>
       <!-- Honeypot: invisible to humans, bots fill it out -->
@@ -2065,6 +2069,8 @@ function submitEmail() {
   const userName = nameInput.value.trim();
   const input = document.getElementById('emailInput');
   const email = input.value.trim();
+  const company = document.getElementById('companyInput').value.trim();
+  const phone = document.getElementById('phoneInput').value.trim();
 
   // Inline error helper
   const errEl = document.getElementById('emailSuccess');
@@ -2130,6 +2136,8 @@ function submitEmail() {
       fields: [
         { name: 'firstname', value: userName },
         { name: 'email', value: email },
+        { name: 'company', value: company },
+        { name: 'phone', value: phone },
         { name: 'ki_check_score', value: String(KICheck.cachedScore) },
         { name: 'kicheck_persona', value: KICheck.cachedPersona },
         { name: 'kicheck_antworten', value: JSON.stringify(KICheck.userAnswers) }

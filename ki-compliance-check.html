@@ -2159,6 +2159,9 @@ function submitEmail() {
     return;
   }
 
+  // Meta Pixel: Lead conversion event
+  if (typeof fbq === 'function') fbq('track', 'Lead');
+
   // Generate and download PDF
   const doc = generatePDF(
     KICheck.cachedResults, KICheck.cachedScore, KICheck.cachedPersona,

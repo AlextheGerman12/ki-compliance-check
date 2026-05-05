@@ -857,7 +857,7 @@ src="https://www.facebook.com/tr?id=1977987719789754&ev=PageView&noscript=1"
           <div class="check-email-gate__field check-email-gate__field--required">
             <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Kanzlei">
           </div>
-          <div class="check-email-gate__field">
+          <div class="check-email-gate__field check-email-gate__field--required">
             <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer">
           </div>
         </div>
@@ -2135,7 +2135,8 @@ function submitEmail() {
 
   // Reset previous error styles
   const companyInput = document.getElementById('companyInput');
-  [nameInput, input, companyInput].forEach(el => el.style.borderColor = '');
+  const phoneInput = document.getElementById('phoneInput');
+  [nameInput, input, companyInput, phoneInput].forEach(el => el.style.borderColor = '');
 
   if (!userName) {
     nameInput.style.borderColor = 'var(--red)';
@@ -2155,6 +2156,13 @@ function submitEmail() {
     companyInput.style.borderColor = 'var(--red)';
     showError('Bitte geben Sie Ihre Kanzlei ein.');
     companyInput.focus();
+    return;
+  }
+
+  if (!phone) {
+    phoneInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie Ihre Telefonnummer ein.');
+    phoneInput.focus();
     return;
   }
 

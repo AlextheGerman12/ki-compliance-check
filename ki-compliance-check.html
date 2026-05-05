@@ -2166,6 +2166,13 @@ function submitEmail() {
     return;
   }
 
+  if (phone.replace(/\D/g, '').length < 7) {
+    phoneInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie eine gültige Telefonnummer ein (mindestens 7 Ziffern).');
+    phoneInput.focus();
+    return;
+  }
+
   // Consent check
   if (!document.getElementById('consentCheckbox').checked) {
     showError('Bitte stimmen Sie der Datenschutzerklärung zu.');

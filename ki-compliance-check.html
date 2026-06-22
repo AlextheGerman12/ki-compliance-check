@@ -847,18 +847,23 @@ src="https://www.facebook.com/tr?id=1977987719789754&ev=PageView&noscript=1"
       <div class="check-email-gate__form" id="emailForm">
         <div class="check-email-gate__input-row">
           <div class="check-email-gate__field check-email-gate__field--required">
-            <input type="text" class="check-email-gate__input" id="nameInput" placeholder="Ihr Name">
+            <input type="text" class="check-email-gate__input" id="firstNameInput" placeholder="Vorname" autocomplete="given-name">
           </div>
           <div class="check-email-gate__field check-email-gate__field--required">
-            <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de">
+            <input type="text" class="check-email-gate__input" id="lastNameInput" placeholder="Nachname" autocomplete="family-name">
           </div>
         </div>
         <div class="check-email-gate__input-row">
           <div class="check-email-gate__field check-email-gate__field--required">
-            <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Kanzlei">
+            <input type="email" class="check-email-gate__input" id="emailInput" placeholder="ihre@email.de" autocomplete="email">
           </div>
           <div class="check-email-gate__field check-email-gate__field--required">
-            <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer">
+            <input type="tel" class="check-email-gate__input" id="phoneInput" placeholder="Telefonnummer" autocomplete="tel">
+          </div>
+        </div>
+        <div class="check-email-gate__input-row">
+          <div class="check-email-gate__field check-email-gate__field--required">
+            <input type="text" class="check-email-gate__input" id="companyInput" placeholder="Kanzlei" autocomplete="organization">
           </div>
         </div>
         <button class="btn btn--accent" onclick="submitEmail()">PDF erhalten &#8594;</button>
@@ -2115,8 +2120,10 @@ function generatePDF(results, score, personaLabel, verdictTitle, verdictText, re
 
 // ==================== EMAIL + PDF ====================
 function submitEmail() {
-  const nameInput = document.getElementById('nameInput');
-  const userName = nameInput.value.trim();
+  const firstNameInput = document.getElementById('firstNameInput');
+  const lastNameInput = document.getElementById('lastNameInput');
+  const firstName = firstNameInput.value.trim();
+  const lastName = lastNameInput.value.trim();
   const input = document.getElementById('emailInput');
   const email = input.value.trim();
   const company = document.getElementById('companyInput').value.trim();
@@ -2136,12 +2143,19 @@ function submitEmail() {
   // Reset previous error styles
   const companyInput = document.getElementById('companyInput');
   const phoneInput = document.getElementById('phoneInput');
-  [nameInput, input, companyInput, phoneInput].forEach(el => el.style.borderColor = '');
+  [firstNameInput, lastNameInput, input, companyInput, phoneInput].forEach(el => el.style.borderColor = '');
 
-  if (!userName) {
-    nameInput.style.borderColor = 'var(--red)';
-    showError('Bitte geben Sie Ihren Namen ein.');
-    nameInput.focus();
+  if (!firstName) {
+    firstNameInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie Ihren Vornamen ein.');
+    firstNameInput.focus();
+    return;
+  }
+
+  if (!lastName) {
+    lastNameInput.style.borderColor = 'var(--red)';
+    showError('Bitte geben Sie Ihren Nachnamen ein.');
+    lastNameInput.focus();
     return;
   }
 
@@ -2220,7 +2234,8 @@ function submitEmail() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       fields: [
-        { name: 'firstname', value: userName },
+        { name: 'firstname', value: firstName },
+        { name: 'lastname', value: lastName },
         { name: 'email', value: email },
         { name: 'company', value: company },
         { name: 'phone', value: phone },
@@ -2229,6 +2244,8 @@ function submitEmail() {
         { name: 'kicheck_antworten', value: JSON.stringify(KICheck.userAnswers) }
       ]
     })
+  }).then((res) => {
+    if (!res.ok) res.text().then((body) => console.warn('HubSpot submission rejected:', res.status, body));
   }).catch((err) => console.warn('HubSpot submission failed:', err));
 }
 
